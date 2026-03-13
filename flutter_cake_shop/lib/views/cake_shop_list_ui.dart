@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_cake_shop/models/case_shop.dart';
+import 'package:flutter_cake_shop/models/case_shop.dart';
+import 'package:flutter_cake_shop/views/cake_shop_detail_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
  
 class CakeShopListUi extends StatefulWidget {
@@ -13,18 +15,17 @@ class CakeShopListUi extends StatefulWidget {
 }
  
 class _CakeShopListUiState extends State<CakeShopListUi> {
-  //ตัวแปรเก็บที่อยู่รูปที่จะใช้กับ Slider
+  //ตัวแปรเก็บรูปที่จะใช้กับ slider
   List<String> imgCakeShop = [
-    'assets/images/ck01.png',
-    'assets/images/ck02.png',
-    'assets/images/ck03.png',
-    'assets/images/ck04.png',
-    'assets/images/ck05.png',
-    'assets/images/ck06.png',
-    'assets/images/ck07.png',
+    'assests/images/ck01.png',
+    'assests/images/ck02.png',
+    'assests/images/ck03.png',
+    'assests/images/ck04.png',
+    'assests/images/ck05.png',
+    'assests/images/ck06.png',
+    'assests/images/ck07.png',
   ];
  
-  //ตัวแปรเก็บข้อมูลของร้านแต่ละร้าน
   List<CakeShop> cakeShops = [
     CakeShop(
       name: 'Yellow Spoon Pastry',
@@ -141,14 +142,13 @@ class _CakeShopListUiState extends State<CakeShopListUi> {
     await launchUrl(launchUri);
   }
  
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
         title: Text(
-          'สายด่วนกินเค้ก',
+          'Cake Shop List',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -158,14 +158,13 @@ class _CakeShopListUiState extends State<CakeShopListUi> {
       body: Center(
         child: Column(
           children: [
-            //CarouselSlider
+            //carouselslider
             CarouselSlider.builder(
               itemCount: imgCakeShop.length,
               options: CarouselOptions(
                 height: 200,
                 autoPlay: true,
                 autoPlayInterval: Duration(seconds: 2),
-                // scrollDirection: Axis.vertical,
               ),
               itemBuilder: (context, index, realIndex) {
                 return Container(
@@ -184,34 +183,38 @@ class _CakeShopListUiState extends State<CakeShopListUi> {
             //ListView
             Expanded(
               child: ListView.separated(
-                itemCount: cakeShops.length,
-                separatorBuilder: (context, index) => Divider(
-                  color: Colors.red[200],
-                ),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    onTap: (){
-                      _makePhoneCall(cakeShops[index].phone!);
-                    },
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset(
-                        'assets/images/' + cakeShops[index].image1!,
+                  itemCount: cakeShops.length,
+                  separatorBuilder: (context, index) => Divider(
+                        color: Colors.red[200],
                       ),
-                    ),
-                    title: Text(
-                      cakeShops[index].name!,
-                    ),
-                    subtitle: Text(
-                      cakeShops[index].phone!,
-                    ),
-                    trailing: Icon(
-                      Icons.info,
-                      color: Colors.red,
-                    ),
-                  );
-                }
-              ),
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        //เปิดไปหน้า cakeshop detailUI แบบย้อนกลับได้ พร้อมส่งข่อมูลร้านไปด้วย
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CakeShopDetialUi(
+                              cakeShop: cakeShops[index],
+                            ),
+                          ),
+                        );
+                      },
+                      leading: Image.asset(
+                        'assests/images/' + cakeShops[index].image1!,
+                      ),
+                      title: Text(
+                        cakeShops[index].name!,
+                      ),
+                      subtitle: Text(
+                        cakeShops[index].phone!,
+                      ),
+                      trailing: Icon(
+                        Icons.info,
+                        color: Colors.red,
+                      ),
+                    );
+                  }),
             ),
           ],
         ),
